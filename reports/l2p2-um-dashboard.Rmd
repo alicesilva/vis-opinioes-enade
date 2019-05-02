@@ -1,0 +1,38 @@
+---
+title: "L2P2 - Um dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(viridis)
+library(hrbrthemes)
+library(plotly)
+theme_set(theme_ipsum())
+
+respostas = read_csv(here::here("data/enade-ccc-2017.csv"),
+                     col_types = "cccdccdddc")
+
+ufcg_cc = respostas %>% 
+    filter(IES == "UFCG")
+```
+
+### Comos os alunos formandos da UFCG do curso de Ciência da Computação avaliaram as questões sobre infraestrutura?
+
+```{r}
+plot_ly(data = ufcg_cc %>% filter(categoria == "Infraestrutura"), 
+             x = ~ media, 
+             y = ~ tema,
+             type = "scatter",
+            mode = "markers",
+            color = ~n, 
+             text = ~enunciado)
+```
+***
+
+Analisando a visualização é possível perceber que os refeitórios, cantina e banheiros não foram bem avaliados, ou seja, segundo os alunos formandos, eles não estão em condições adequadas de uso para atender as suas necessidades. Um fato curioso é que a quantidade de funcionários é bem satisfatória na avaliação, mas se os banheiros não estão em boa condições, então, talvez, falte funcionários para limpá-los. Porém, podemos ver que a quantidade de avaliações que a pergunta sobre a quantidade de funcionários recebeu é menor do que a quantidade de alunos que responderam a questão sobre os refeitórios, cantina e banheiros.
+Além disso, é possível ver que a instituição não promoveu atividades de cultura, lazer e interação social, mas o número de respostas para essa questão é muito menor em comparação com as demais.
+Também, a infraestrutura das salas de aula precisam ser melhorada pela instituição, pois de acordo com os formandos as condições nelas não estão adequadas.
